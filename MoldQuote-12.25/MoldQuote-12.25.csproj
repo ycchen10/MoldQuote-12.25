@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E7D2151B-8A89-4B28-AB1C-D14BCA86719F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MoldQuote</RootNamespace>
+    <AssemblyName>MoldQuote-12.25</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\Application\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NXOpen">
+      <HintPath>..\..\Managed\NXOpen.dll</HintPath>
+    </Reference>
+    <Reference Include="NXOpen.Guide">
+      <HintPath>..\..\Managed\NXOpen.Guide.dll</HintPath>
+    </Reference>
+    <Reference Include="NXOpen.UF">
+      <HintPath>..\..\Managed\NXOpen.UF.dll</HintPath>
+    </Reference>
+    <Reference Include="NXOpen.Utilities">
+      <HintPath>..\..\Managed\NXOpen.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="NXOpenUI">
+      <HintPath>..\..\Managed\NXOpenUI.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Mode\AnalyzeFaceFactory.cs" />
+    <Compile Include="Mode\HoleFeatureFactory.cs" />
+    <Compile Include="Mode\HoleFeature.cs" />
+    <Compile Include="Mode\CircleStep.cs" />
+    <Compile Include="Mode\CircularConeStep.cs" />
+    <Compile Include="Mode\CylinderStep.cs" />
+    <Compile Include="Mode\CircleFaceStep.cs" />
+    <Compile Include="Mode\IDisplayObject.cs" />
+    <Compile Include="Mode\MoldQuote.cs" />
+    <Compile Include="Mode\OnlyBlindHoleFeature.cs" />
+    <Compile Include="Mode\OnlyThroughHoleFeature.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Mode\StepBlindHoleFeature.cs" />
+    <Compile Include="Mode\StepHoleFeature.cs" />
+    <Compile Include="Mode\StepThroughHoleFeature.cs" />
+    <Compile Include="UI\MoldIncentory.cs" />
+    <Compile Include="UI\MoldQuote.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DAL\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CycBasic\CycBasic.csproj">
+      <Project>{d405f298-47a3-4e47-a78f-619e7992dec3}</Project>
+      <Name>CycBasic</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
