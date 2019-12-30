@@ -50,7 +50,7 @@ namespace MoldQuote
             BodyBoundingBox box = new BodyBoundingBox();
             foreach (Body body in part.Bodies)
             {
-                box = bodyFactory.GetBoundingBoxFace(body); ;
+                box = bodyFactory.GetBoundingBoxFace(body);
                 Cylinder cy = bodyFactory.CreateCylinder(body, box);
                 Cuboid cu = bodyFactory.CreateCuboid(body, box);
                 if (cy != null)
@@ -78,13 +78,26 @@ namespace MoldQuote
             Point3d pt1 = UMathUtils.GetMiddle(boxA.CenderPt, boxA.CenderPt);
             Vector3d vec = UMathUtils.GetVector(boxB.CenderPt, boxA.CenderPt);
             mat.TransformToZAxis(pt1, vec);
+            Point3d pt3 = new Point3d(boxA.CenderPt.X, boxA.CenderPt.Y, boxA.CenderPt.Z);
+            mat.ApplyPos(ref pt3);
+            Vector3d vecX = new Vector3d();
+            Vector3d vecY = new Vector3d();
+            if (Math.Round(boxA.DisPt.X, 3) > Math.Round(boxA.DisPt.Y, 3))
+            {
+                vecX = UMathUtils.GetVector(pt3, new Point3d(pt3.X + boxA.DisPt.X, pt3.Y, pt3.Z));
+                vecY = UMathUtils.GetVector(pt3, new Point3d(pt3.X, pt3.Y + boxA.DisPt.Y, pt3.Z));
+            }
+            else
+            {
+                vecY = UMathUtils.GetVector(pt3, new Point3d(pt3.X + boxA.DisPt.X, pt3.Y, pt3.Z));
+                vecX = UMathUtils.GetVector(pt3, new Point3d(pt3.X, pt3.Y + boxA.DisPt.Y, pt3.Z));
+            }
+            mat.TransformToZAxis(pt1, vecX, vecY);
             Matrix4 invers = mat.GetInversMatrix();
 
-            if (UMathUtils.IsEqual(pt1.X, 0) && UMathUtils.IsEqual(pt1.Y, 0) && UMathUtils.IsEqual(pt1.Z, 0))
-            {
-                CartesianCoordinateSystem wcs = CycBoundingBoxUtils.CreateCoordinateSystem(mat, invers);
-                m_workPart.WCS.SetCoordinateSystem(wcs);
-            }
+            CartesianCoordinateSystem wcs = CycBoundingBoxUtils.CreateCoordinateSystem(mat, invers);
+            m_workPart.WCS.SetCoordinateSystem(wcs);
+
         }
         public IDisplayObject FindDisplayObject(Node node)
         {

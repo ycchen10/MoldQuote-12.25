@@ -42,14 +42,7 @@ namespace MoldQuote
 
             {
                 Cuboid cu = new Cuboid(body);
-                cu.FaceOfMaxX = box.FaceOfMaxX;
-                cu.FaceOfMaxY = box.FaceOfMaxY;
-                cu.FaceOfMaxZ = box.FaceOfMaxZ;
-                cu.FaceOfMinX = box.FaceOfMinX;
-                cu.FaceOfMinY = box.FaceOfMinY;
-                cu.FaceOfMinZ = box.FaceOfMinZ;
-                cu.DisPt = box.DisPt;
-                cu.CenderPt = box.CenderPt;
+                cu.Box = box;
                 return cu;
             }
             return null;
@@ -71,43 +64,58 @@ namespace MoldQuote
             box.CenderPt = centerPt;
             box.DisPt = disPt;
             box.Body = body;
+            List<CycFaceData> cf = new List<CycFaceData>();
             foreach (Face fe in body.GetFaces())
             {
                 CycFaceData faceData = CycFaceUtils.AskFaceData(fe);
-                double angleX = UMathUtils.Angle(faceData.Dir, mat.GetXAxis());
-                double angleY = UMathUtils.Angle(faceData.Dir, mat.GetYAxis());
-                double angleZ = UMathUtils.Angle(faceData.Dir, mat.GetZAxis());
-                if (UMathUtils.IsEqual(angleZ, 0))
-                {
-                    if (UMathUtils.IsEqual(faceData.Point.Z, centerPt.Z + disPt.Z))
-                        box.FaceOfMaxZ.Add(faceData);
-                }
-                if (UMathUtils.IsEqual(angleZ, Math.PI))
-                {
-                    if (UMathUtils.IsEqual(faceData.Point.Z, centerPt.Z - disPt.Z))
-                        box.FaceOfMinZ.Add(faceData);
-                }
-                if (UMathUtils.IsEqual(angleX, 0))
-                {
-                    if (UMathUtils.IsEqual(faceData.Point.X, centerPt.X + disPt.X))
-                        box.FaceOfMaxX.Add(faceData);
-                }
-                if (UMathUtils.IsEqual(angleX, Math.PI))
-                {
-                    if (UMathUtils.IsEqual(faceData.Point.X, centerPt.X - disPt.X))
-                        box.FaceOfMinX.Add(faceData);
-                }
-                if (UMathUtils.IsEqual(angleY, 0))
-                {
-                    if (UMathUtils.IsEqual(faceData.Point.Y, centerPt.Y + disPt.Y))
-                        box.FaceOfMaxY.Add(faceData);
-                }
-                if (UMathUtils.IsEqual(angleY, Math.PI))
-                {
-                    if (UMathUtils.IsEqual(faceData.Point.Y, centerPt.Y - disPt.Y))
-                        box.FaceOfMinY.Add(faceData);
-                }
+                cf.Add(faceData);
+                //double angleX = UMathUtils.Angle(faceData.Dir, mat.GetXAxis());
+                //double angleY = UMathUtils.Angle(faceData.Dir, mat.GetYAxis());
+                //double angleZ = UMathUtils.Angle(faceData.Dir, mat.GetZAxis());
+                //Point3d pt1 = faceData.Point;
+                //mat.ApplyPos(ref pt1);
+                //if (UMathUtils.IsEqual(angleZ, 0))
+                //{
+                //    if (UMathUtils.IsEqual(faceData.Point.Z, centerPt.Z + disPt.Z))
+                //        box.FaceOfMaxZ.Add(faceData);
+                //}
+                //if (UMathUtils.IsEqual(angleZ, Math.PI))
+                //{
+                //    if (UMathUtils.IsEqual(faceData.Point.Z, centerPt.Z - disPt.Z))
+                //        box.FaceOfMinZ.Add(faceData);
+                //}
+                //if (UMathUtils.IsEqual(angleX, 0))
+                //{
+                //    if (UMathUtils.IsEqual(faceData.Point.X, centerPt.X + disPt.X))
+                //        box.FaceOfMaxX.Add(faceData);
+                //}
+                //if (UMathUtils.IsEqual(angleX, Math.PI))
+                //{
+                //    if (UMathUtils.IsEqual(faceData.Point.X, centerPt.X - disPt.X))
+                //        box.FaceOfMinX.Add(faceData);
+                //}
+                //if (UMathUtils.IsEqual(angleY, 0))
+                //{
+                //    if (UMathUtils.IsEqual(faceData.Point.Y, centerPt.Y + disPt.Y))
+                //        box.FaceOfMaxY.Add(faceData);
+                //}
+                //if (UMathUtils.IsEqual(angleY, Math.PI))
+                //{
+                //    if (UMathUtils.IsEqual(faceData.Point.Y, centerPt.Y - disPt.Y))
+                //        box.FaceOfMinY.Add(faceData);
+                //}
             }
+            box.FaceOfMaxX = cf.Where(e => UMathUtils.IsEqual(UMathUtils.Angle(e.Dir, mat.GetXAxis()), 0)&& UMathUtils.IsEqual(e.Point.X, centerPt.X + disPt.X)).ToList();
+            box.FaceOfMinX = cf.Where(e => UMathUtils.IsEqual(UMathUtils.Angle(e.Dir, mat.GetXAxis()), Math.PI) && UMathUtils.IsEqual(e.Point.X, centerPt.X - disPt.X)).ToList();
+
+            box.FaceOfMaxY = cf.Where(e => UMathUtils.IsEqual(UMathUtils.Angle(e.Dir, mat.GetYAxis()), 0) && UMathUtils.IsEqual(e.Point.Y, centerPt.Y + disPt.Y)).ToList();
+            box.FaceOfMinY = cf.Where(e => UMathUtils.IsEqual(UMathUtils.Angle(e.Dir, mat.GetYAxis()), Math.PI) && UMathUtils.IsEqual(e.Point.Y, centerPt.Y - disPt.Y)).ToList();
+
+            box.FaceOfMaxZ = cf.Where(e => UMathUtils.IsEqual(UMathUtils.Angle(e.Dir, mat.GetZAxis()), 0) && UMathUtils.IsEqual(e.Point.Z, centerPt.Z + disPt.Z)).ToList();
+            box.FaceOfMinZ = cf.Where(e => UMathUtils.IsEqual(UMathUtils.Angle(e.Dir, mat.GetZAxis()), Math.PI) && UMathUtils.IsEqual(e.Point.Z, centerPt.Z - disPt.Z)).ToList();
+
+
+
             return box;
 
         }

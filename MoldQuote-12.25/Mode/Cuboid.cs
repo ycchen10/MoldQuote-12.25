@@ -12,7 +12,7 @@ namespace MoldQuote
     /// <summary>
     /// 长方体
     /// </summary>
-    public class Cuboid : BodyBoundingBox, IDisplayObject
+    public class Cuboid : IDisplayObject
     {
 
         public List<CycFaceData> CavityFace { get; set; }
@@ -21,11 +21,14 @@ namespace MoldQuote
 
         public List<HoleFeature> HoleList { get; set; } = new List<HoleFeature>();
 
+        public BodyBoundingBox Box { get; set; }
+
+        public Body Body { get; set; }
         public Cuboid(Body body)
         {
             this.Body = body;
         }
-        
+
         public void Highlight(bool highlight)
         {
             if (highlight)
@@ -55,12 +58,12 @@ namespace MoldQuote
                     this.HoleList.Add(hf);
                 }
             }
-            this.CavityFace = Romove(this.FaceOfMaxX, this.CavityFace);
-            this.CavityFace = Romove(this.FaceOfMaxY, this.CavityFace);
-            this.CavityFace = Romove(this.FaceOfMaxZ, this.CavityFace);
-            this.CavityFace = Romove(this.FaceOfMinX, this.CavityFace);
-            this.CavityFace = Romove(this.FaceOfMinY, this.CavityFace);
-            this.CavityFace = Romove(this.FaceOfMinZ, this.CavityFace);
+            this.CavityFace = Romove(this.Box.FaceOfMaxX, this.CavityFace);
+            this.CavityFace = Romove(this.Box.FaceOfMaxY, this.CavityFace);
+            this.CavityFace = Romove(this.Box.FaceOfMaxZ, this.CavityFace);
+            this.CavityFace = Romove(this.Box.FaceOfMinX, this.CavityFace);
+            this.CavityFace = Romove(this.Box.FaceOfMinY, this.CavityFace);
+            this.CavityFace = Romove(this.Box.FaceOfMinZ, this.CavityFace);
         }
         private HoleFeature FindHole(CircleFaceStep cs, List<HoleFeature> hfs)
         {

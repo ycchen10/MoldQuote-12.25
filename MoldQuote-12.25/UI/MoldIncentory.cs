@@ -254,13 +254,13 @@ namespace MoldQuoteUI
                     m_part = AnalyzePart.Instance();
                     Body bodyA = bodySelectA.GetSelectedObjects()[0] as Body;
                     Body bodyB = bodySelectB.GetSelectedObjects()[0] as Body;
-                    m_part.SetWcs(bodyA,bodyB);
+                  //  m_part.SetWcs(bodyA,bodyB);
                     m_part.Analyze(m_workPart);
                     m_moldBase = new MoldBase();
                     m_moldBase.CuboidClassify(m_part.CuboidList, bodyA, bodyB);
                     m_moldBase.CylinderClassify(m_part.CylinderList);
                     AddFeatureToTree(m_moldBase);
-                    
+
                 }
                 else if (block == label0)
                 {

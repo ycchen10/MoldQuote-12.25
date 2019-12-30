@@ -65,51 +65,59 @@ namespace MoldQuote
         {
             this.APlate = cuboids.Find(x => x.Body == a);
             this.BPlate = cuboids.Find(x => x.Body == b);
-            double max = Math.Round(this.APlate.CenderPt.Z + this.APlate.DisPt.Z, 3);
-
-            while (GetLoopThrugh(cuboids, ref max))
+            double max = Math.Round(this.APlate.Box.CenderPt.Z + this.APlate.Box.DisPt.Z, 3);
+            while (GetLoopThrughMax(cuboids, ref max))
             {
-            }          
-            this.UpperPlates = this.UpperPlates.OrderBy(o => o.CenderPt.Z).ToList(); ;
-            
+            }
+            this.UpperPlates = this.UpperPlates.OrderBy(o => o.Box.CenderPt.Z).ToList(); ;
+
             this.UpperSpacer = GetSpacer(this.UpperPlates);
-           
+            this.UpperSpacer = this.UpperSpacer.OrderBy(o => o.Box.CenderPt.Y).ToList(); ;
+            foreach (Cuboid cu in this.UpperSpacer)
+            {
+                this.UpperPlates.Remove(cu);
+            }
             if (this.UpperSpacer.Count > 0)
             {
-                double spacerMax = Math.Round(UpperSpacer[0].CenderPt.Z + UpperSpacer[0].DisPt.Z, 3);
-                double spacerMin = Math.Round(UpperSpacer[0].CenderPt.Z - UpperSpacer[0].DisPt.Z, 3);
+                double spacerMax = Math.Round(UpperSpacer[0].Box.CenderPt.Z + UpperSpacer[0].Box.DisPt.Z, 3);
+                double spacerMin = Math.Round(UpperSpacer[0].Box.CenderPt.Z - UpperSpacer[0].Box.DisPt.Z, 3);
                 foreach (Cuboid cu in cuboids)
                 {
-                    double cuMax = Math.Round(cu.CenderPt.Z + cu.DisPt.Z, 3);
-                    double cuMin = Math.Round(cu.CenderPt.Z - cu.DisPt.Z, 3);
-                   
-                    if (spacerMin < cuMin && spacerMax > cuMax)
+                    double cuMax = Math.Round(cu.Box.CenderPt.Z + cu.Box.DisPt.Z, 3);
+                    double cuMin = Math.Round(cu.Box.CenderPt.Z - cu.Box.DisPt.Z, 3);
+
+                    if (spacerMin < cuMin && spacerMax > cuMax && cu.Box.DisPt.Z * 2>=10 &&
+                          Math.Round(this.UpperSpacer[0].Box.CenderPt.Y, 3) < Math.Round(cu.Box.CenderPt.Y, 3) &&
+                         Math.Round(this.UpperSpacer[this.UpperSpacer.Count - 1].Box.CenderPt.Y, 3) > Math.Round(cu.Box.CenderPt.Y, 3))
                     {
                         this.UpperEiectorPlates.Add(cu);
                     }
                 }
             }
 
-            double min = Math.Round(this.BPlate.CenderPt.Z - this.BPlate.DisPt.Z, 3);
-            foreach (Cuboid cu in cuboids)
-            {
-                if (Math.Round(cu.CenderPt.Z + cu.DisPt.Z, 3) == min)
-                {
-                    this.LowerPlates.Add(cu);
-                    max = Math.Round(cu.CenderPt.Z - cu.DisPt.Z, 3);
-                }
-            }
-            this.LowerPlates = this.LowerPlates.OrderByDescending(o => o.CenderPt.Z).ToList(); ;
+            double min = Math.Round(this.BPlate.Box.CenderPt.Z - this.BPlate.Box.DisPt.Z, 3);
+            while (GetLoopThrughMix(cuboids, ref min))
+            { }
+            this.LowerPlates = this.LowerPlates.OrderByDescending(o => o.Box.CenderPt.Z).ToList();
             this.LowerSpacer = GetSpacer(this.LowerPlates);
+            this.LowerSpacer = this.LowerSpacer.OrderBy(o => o.Box.CenderPt.Y).ToList();
+            foreach (Cuboid cu in this.LowerSpacer)
+            {
+                this.LowerPlates.Remove(cu);
+            }
             if (this.LowerSpacer.Count > 0)
             {
+                double spacerMax = Math.Round(LowerSpacer[0].Box.CenderPt.Z + LowerSpacer[0].Box.DisPt.Z, 3);
+                double spacerMin = Math.Round(LowerSpacer[0].Box.CenderPt.Z - LowerSpacer[0].Box.DisPt.Z, 3);
+
                 foreach (Cuboid cu in cuboids)
                 {
-                    double cuMax = Math.Round(cu.CenderPt.Z + cu.DisPt.Z, 3);
-                    double cuMin = Math.Round(cu.CenderPt.Z - cu.DisPt.Z, 3);
-                    double spacerMax = Math.Round(LowerSpacer[0].CenderPt.Z + cu.DisPt.Z, 3);
-                    double spacerMin = Math.Round(LowerSpacer[0].CenderPt.Z - cu.DisPt.Z, 3);
-                    if (spacerMin < cuMin && spacerMax > cuMax)
+                    double cuMax = Math.Round(cu.Box.CenderPt.Z + cu.Box.DisPt.Z, 3);
+                    double cuMin = Math.Round(cu.Box.CenderPt.Z - cu.Box.DisPt.Z, 3);
+
+                    if (spacerMin < cuMin && spacerMax > cuMax && cu.Box.DisPt.Z * 2 >= 10 &&
+                           Math.Round(this.LowerSpacer[0].Box.CenderPt.Y, 3) < Math.Round(cu.Box.CenderPt.Y, 3) &&
+                         Math.Round(this.LowerSpacer[this.LowerSpacer.Count - 1].Box.CenderPt.Y, 3) > Math.Round(cu.Box.CenderPt.Y, 3))
                     {
                         this.UpperEiectorPlates.Add(cu);
                     }
@@ -135,11 +143,10 @@ namespace MoldQuote
                 {
                     Point3d pt = bt.EndPt;
                     mat.ApplyPos(ref pt);
-                    if (Math.Round(pt.Z, 3) < Math.Round(this.APlate.CenderPt.Z + this.APlate.DisPt.Z, 3) ||
-                       Math.Round(pt.Z, 3) < Math.Round(this.BPlate.CenderPt.Z - this.BPlate.DisPt.Z, 3))
+                    if (Math.Round(pt.Z, 3) < Math.Round(this.APlate.Box.CenderPt.Z + this.APlate.Box.DisPt.Z, 3) ||
+                       Math.Round(pt.Z, 3) < Math.Round(this.BPlate.Box.CenderPt.Z - this.BPlate.Box.DisPt.Z, 3))
                     {
                         this.BoltList.Add(bt);
-
                     }
                     continue;
                 }
@@ -148,8 +155,8 @@ namespace MoldQuote
                 {
                     Point3d pt = bt.EndPt;
                     mat.ApplyPos(ref pt);
-                    if (Math.Round(pt.Z, 3) > Math.Round(this.LowerSpacer[0].CenderPt.Z + this.LowerSpacer[0].DisPt.Z, 3) &&
-                       Math.Round(pt.Z, 3) < Math.Round(this.BPlate.CenderPt.Z + this.BPlate.DisPt.Z, 3))
+                    if (Math.Round(pt.Z, 3) > Math.Round(this.LowerSpacer[0].Box.CenderPt.Z + this.LowerSpacer[0].Box.DisPt.Z, 3) &&
+                       Math.Round(pt.Z, 3) < Math.Round(this.BPlate.Box.CenderPt.Z + this.BPlate.Box.DisPt.Z, 3))
                     {
                         this.GuideBushList.Add(gb);
 
@@ -194,24 +201,25 @@ namespace MoldQuote
             List<Cuboid> sp = new List<Cuboid>();
             foreach (Cuboid cu in cuboids)
             {
-                if (!UMathUtils.IsEqual(cu.CenderPt.X, 0) || !UMathUtils.IsEqual(cu.CenderPt.Y, 0))
-                {                   
+                if (!UMathUtils.IsEqual(cu.Box.CenderPt.X, 0) || !UMathUtils.IsEqual(cu.Box.CenderPt.Y, 0))
+                {
                     sp.Add(cu);
                 }
 
             }
+
             return sp;
         }
 
-        private bool GetLoopThrugh( List<Cuboid> cd, ref double max)
+        private bool GetLoopThrughMax(List<Cuboid> cd, ref double max)
         {
             bool isok = false;
             double temp = max;
             foreach (Cuboid cu in cd)
             {
-                if (Math.Round(cu.CenderPt.Z - cu.DisPt.Z, 3) == max)
+                if (Math.Round(cu.Box.CenderPt.Z - cu.Box.DisPt.Z, 3) == max)
                 {
-                    temp = Math.Round(cu.CenderPt.Z + cu.DisPt.Z, 3);
+                    temp = Math.Round(cu.Box.CenderPt.Z + cu.Box.DisPt.Z, 3);
                     this.UpperPlates.Add(cu);
                     isok = true;
                 }
@@ -220,7 +228,23 @@ namespace MoldQuote
             return isok;
 
         }
+        private bool GetLoopThrughMix(List<Cuboid> cd, ref double min)
+        {
+            bool isok = false;
+            double temp = min;
+            foreach (Cuboid cu in cd)
+            {
+                if (Math.Round(cu.Box.CenderPt.Z + cu.Box.DisPt.Z, 3) == min)
+                {
+                    temp = Math.Round(cu.Box.CenderPt.Z - cu.Box.DisPt.Z, 3);
+                    this.LowerPlates.Add(cu);
+                    isok = true;
+                }
+            }
+            min = temp;
+            return isok;
 
+        }
 
     }
 }
