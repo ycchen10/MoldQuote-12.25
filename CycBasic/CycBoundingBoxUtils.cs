@@ -31,6 +31,7 @@ namespace CycBasic
             {
                 cs = workPart.WCS.CoordinateSystem;
             }
+            
             if(nxobj[0]==null)
             {
                 MessageBox("分析OBJ为空", NXMessageBox.DialogType.Error);

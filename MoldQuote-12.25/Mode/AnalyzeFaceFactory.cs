@@ -16,7 +16,7 @@ namespace MoldQuote
         /// </summary>
         /// <param name="face"></param>
         /// <returns></returns>
-        public static CircleFaceStep CreateHoleStep(Face face)
+        public static CircleFaceStep CreateCircleStep(Face face)
         {
             if (face.SolidFaceType == Face.FaceType.Cylindrical) //圆柱
             {
@@ -112,7 +112,7 @@ namespace MoldQuote
                 bool hole = true;
                 if (face.GetEdges().Length != 2)
                     hole = false;
-                if (cs.GetHole() && hole)
+                if (!cs.GetHole() && hole)
                     return cs;
             }
             if (face.SolidFaceType == Face.FaceType.Conical)
@@ -121,7 +121,7 @@ namespace MoldQuote
                 bool hole = true;
                 if (face.GetEdges().Length != 2)
                     hole = false;
-                if (ch.GetHole() || hole)
+                if (!ch.GetHole() && hole)
                     return ch;
             }
             if (face.SolidFaceType == Face.FaceType.Planar)

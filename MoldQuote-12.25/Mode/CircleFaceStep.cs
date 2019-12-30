@@ -45,9 +45,9 @@ namespace MoldQuote
         /// 矩阵
         /// </summary>
         public Matrix4 Matr { get; set; }
-       
+
         public Node Node { get; set; }
-       
+
         /// <summary>
         /// 判断是否是一个孔
         /// </summary>
@@ -117,55 +117,72 @@ namespace MoldQuote
         }
         public int CompareTo(CircleFaceStep other)
         {
-            Point3d thisPt = UMathUtils.GetMiddle(this.StartPos, this.EndPos);
-            Point3d otherPt = UMathUtils.GetMiddle(other.StartPos, other.EndPos);
-            Matrix4 mat = new Matrix4();
-            Vector3d vec = new Vector3d();
-            mat.Identity();
-            if (this.MaxDia == this.MinDia)
+            try
             {
-                if (this.MaxDia >= other.MaxDia)
+                Point3d thisPt = new Point3d();
+                Point3d otherPt = new Point3d();
+                if (UMathUtils.IsEqual(this.StartPos, this.EndPos))
+                    thisPt = this.StartPos;
+                else
+                    thisPt = UMathUtils.GetMiddle(this.StartPos, this.EndPos);
+                if (UMathUtils.IsEqual(other.StartPos, other.EndPos))
+                    otherPt = other.StartPos;
+                else
+                    otherPt = UMathUtils.GetMiddle(other.StartPos, other.EndPos);
+                Matrix4 mat = new Matrix4();
+                Vector3d vec = new Vector3d();
+                mat.Identity();
+                if (this.MaxDia == this.MinDia)
                 {
-                    if (UMathUtils.IsEqual(this.StartPos, other.StartPos))
+                    if (this.MaxDia >= other.MaxDia)
                     {
-                        vec = UMathUtils.GetVector(other.EndPos, this.EndPos);
-                        mat.TransformToZAxis(this.EndPos, vec);
+                        if (UMathUtils.IsEqual(this.StartPos, other.StartPos))
+                        {
+                            vec = UMathUtils.GetVector(other.EndPos, this.EndPos);
+                            mat.TransformToZAxis(this.EndPos, vec);
+                        }
+                        else
+                        {
+                            vec = UMathUtils.GetVector(other.StartPos, this.StartPos);
+                            mat.TransformToZAxis(this.StartPos, vec);
+                        }
                     }
                     else
                     {
-                        vec = UMathUtils.GetVector(other.StartPos, this.StartPos);
-                        mat.TransformToZAxis(this.StartPos, vec);
+                        if (UMathUtils.IsEqual(this.StartPos, other.StartPos))
+                        {
+                            vec = UMathUtils.GetVector(this.EndPos, other.EndPos);
+                            mat.TransformToZAxis(other.EndPos, vec);
+                        }
+                        else
+                        {
+                            vec = UMathUtils.GetVector(this.StartPos, other.StartPos);
+                            mat.TransformToZAxis(other.StartPos, vec);
+                        }
                     }
                 }
                 else
-                {
-                    if (UMathUtils.IsEqual(this.StartPos, other.StartPos))
-                    {
-                        vec = UMathUtils.GetVector(this.EndPos, other.EndPos);
-                        mat.TransformToZAxis(other.EndPos, vec);
-                    }
-                    else
-                    {
-                        vec = UMathUtils.GetVector(this.StartPos, other.StartPos);
-                        mat.TransformToZAxis(other.StartPos, vec);
-                    }
-                }
-            }
-            else
-                mat = this.Matr;
-            mat.ApplyPos(ref thisPt);
-            mat.ApplyPos(ref otherPt);
-            if (Math.Round(thisPt.Z, 3) > Math.Round(otherPt.Z, 3))
-                return -1;
-            else if(Math.Round(thisPt.Z, 3) == Math.Round(otherPt.Z, 3))
-            {
-                if (this.MaxDia >= other.MaxDia)
+                    mat = this.Matr;
+                mat.ApplyPos(ref thisPt);
+                mat.ApplyPos(ref otherPt);
+
+                if (Math.Round(thisPt.Z, 3) > Math.Round(otherPt.Z, 3))
                     return -1;
+                else if (Math.Round(thisPt.Z, 3) == Math.Round(otherPt.Z, 3))
+                {
+                    if (this.MaxDia >= other.MaxDia)
+                        return -1;
+                    else
+                        return 1;
+                }
                 else
                     return 1;
             }
-            else
-                return 1;
+            catch (Exception ex)
+            {
+                LogMgr.WriteLog(ex.Message);
+            }
+            return 1;
 
         }
         /// <summary>

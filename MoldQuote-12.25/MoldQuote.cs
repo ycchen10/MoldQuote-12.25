@@ -13,7 +13,7 @@ namespace MoldQuote
     {
         public static int Main(string[] args)
         {
-            if (args[0] == "MENU_MoldQuote-12.25")
+            if (args[0] == "MENU_MoldQuote1225")
             {
                 MoldQuoteUI.MoldIncentory mq = new MoldQuoteUI.MoldIncentory();
                 mq.Show();

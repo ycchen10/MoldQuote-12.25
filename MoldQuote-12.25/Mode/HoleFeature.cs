@@ -39,6 +39,15 @@ namespace MoldQuote
 
         public Node Node { get; set; }
 
+        public HoleFeature()
+        {
+
+        }
+        public HoleFeature(CircleFaceStep cs)
+        {
+            this.StepList.Add(cs);
+        }
+
         public bool Equals(HoleFeature other)
         {
             if (this.Name == other.Name)
@@ -106,6 +115,25 @@ namespace MoldQuote
                 return 1;
 
 
+        }
+
+        public bool FindHole(CircleFaceStep cs)
+        {
+            if(this.StepList.Count==0||this.StepList==null)
+            {
+                this.StepList.Add(cs);
+                return true;
+            }
+            else
+            {
+                if (this.StepList[0].IsCylinder(cs))
+                {
+                    this.StepList.Add(cs);
+                    return true;
+                }
+                   
+            }
+            return false;
         }
     }
 }

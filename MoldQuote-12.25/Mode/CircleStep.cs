@@ -43,7 +43,7 @@ namespace MoldQuote
             }
             catch(Exception ex)
             {
-                err += this.Face.Tag.ToString() + "边错误！";
+                err += this.Face.Tag.ToString() + "错误！";
                 LogMgr.WriteLog(err + ex.Message);
             }
         }

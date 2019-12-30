@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MoldQuote</RootNamespace>
-    <AssemblyName>MoldQuote-12.25</AssemblyName>
+    <AssemblyName>MoldQuote1225</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -55,7 +55,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mode\AnalyzeBodyFactory.cs" />
+    <Compile Include="DAL\AnalyzePart.cs" />
+    <Compile Include="DAL\MoldBase.cs" />
+    <Compile Include="Mode\BodyBoundingBox.cs" />
+    <Compile Include="Mode\Bolt.cs" />
+    <Compile Include="Mode\Cuboid.cs" />
+    <Compile Include="Mode\Cylinder.cs" />
     <Compile Include="Mode\AnalyzeFaceFactory.cs" />
+    <Compile Include="Mode\GuideBush.cs" />
     <Compile Include="Mode\HoleFeatureFactory.cs" />
     <Compile Include="Mode\HoleFeature.cs" />
     <Compile Include="Mode\CircleStep.cs" />
@@ -63,7 +71,7 @@
     <Compile Include="Mode\CylinderStep.cs" />
     <Compile Include="Mode\CircleFaceStep.cs" />
     <Compile Include="Mode\IDisplayObject.cs" />
-    <Compile Include="Mode\MoldQuote.cs" />
+    <Compile Include="MoldQuote.cs" />
     <Compile Include="Mode\OnlyBlindHoleFeature.cs" />
     <Compile Include="Mode\OnlyThroughHoleFeature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,11 +79,8 @@
     <Compile Include="Mode\StepHoleFeature.cs" />
     <Compile Include="Mode\StepThroughHoleFeature.cs" />
     <Compile Include="UI\MoldIncentory.cs" />
-    <Compile Include="UI\MoldQuote.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DAL\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\CycBasic\CycBasic.csproj">
       <Project>{d405f298-47a3-4e47-a78f-619e7992dec3}</Project>

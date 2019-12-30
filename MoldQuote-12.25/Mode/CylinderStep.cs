@@ -28,6 +28,7 @@ namespace MoldQuote
             Matrix4 mat = new Matrix4();
             mat.Identity();
             mat.TransformToZAxis(this.FaceData.Point, dir);
+            this.Matr = mat;
             foreach (Edge eg in Face.GetEdges())
             {
                 if (eg.SolidEdgeType == Edge.EdgeType.Circular)
@@ -51,7 +52,7 @@ namespace MoldQuote
             }
             catch (Exception ex)
             {
-                err += this.Face.Tag.ToString() + "边错误！";
+                err += this.Face.Tag.ToString() + "错误！";
                 LogMgr.WriteLog(err + ex.Message);
             }
         }

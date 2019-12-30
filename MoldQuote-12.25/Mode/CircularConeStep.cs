@@ -13,12 +13,12 @@ namespace MoldQuote
     /// </summary>
     public class CircularConeStep : CircleFaceStep
     {
-       
+
         public CircularConeStep(Face face)
         {
             this.Face = face;
             this.FaceData = CycFaceUtils.AskFaceData(face);
-           
+
             ComputeHoleStepAttr(this.FaceData.Dir);
         }
         public override void ComputeHoleStepAttr(Vector3d dir)
@@ -26,6 +26,8 @@ namespace MoldQuote
             string err = "";
             Matrix4 mat = new Matrix4();
             mat.Identity();
+            mat.TransformToZAxis(this.FaceData.Point, dir);
+            this.Matr = mat;
             foreach (Edge eg in this.Face.GetEdges())
             {
                 if (eg.SolidEdgeType == Edge.EdgeType.Circular)
@@ -38,7 +40,7 @@ namespace MoldQuote
                 mat.TransformToZAxis(this.StartPos, UMathUtils.GetVector(this.EndPos, this.StartPos));
                 this.MaxDia = Math.Round(this.ArcEdge[0].Radius, 3);
                 this.MinDia = 0;
-                this.HoleStepHigth = UMathUtils.GetDis(this.StartPos, this.EndPos);
+                this.HoleStepHigth = Math.Round(UMathUtils.GetDis(this.StartPos, this.EndPos), 3);
             }
             else if (this.ArcEdge.Count == 2)
             {
@@ -48,11 +50,11 @@ namespace MoldQuote
                 this.MaxDia = Math.Round(this.ArcEdge[0].Radius, 3);
                 this.MinDia = Math.Round(this.ArcEdge[1].Radius, 3);
                 mat.TransformToZAxis(this.StartPos, UMathUtils.GetVector(this.EndPos, this.StartPos));
-                this.HoleStepHigth = UMathUtils.GetDis(this.StartPos, this.EndPos);
+                this.HoleStepHigth = Math.Round(UMathUtils.GetDis(this.StartPos, this.EndPos), 3);
             }
             else
             {
-                err += this.Face.Tag.ToString() + "边错误！";
+                err += this.Face.Tag.ToString() + "错误！";
                 LogMgr.WriteLog(err);
             }
         }

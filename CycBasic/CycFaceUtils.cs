@@ -64,7 +64,7 @@ namespace CycBasic
             fd.RadData = rad_data;
             fd.IntNorm = norm_dir;
             fd.Point = new Point3d(point[0], point[1], point[2]);
-
+            fd.Face = face;
             return fd;
         }
 
@@ -304,6 +304,7 @@ namespace CycBasic
         public double RadData { get; set; }
         public int IntNorm { get; set; }
 
+        public Face Face { get; set; }
         public Point3d GetBoxCenter()
         {
             return new Point3d(0.5 * (BoxMinCorner.X + BoxMaxCorner.X), 0.5 * (BoxMinCorner.Y + BoxMaxCorner.Y), 0.5 * (BoxMinCorner.Z + BoxMaxCorner.Z));
