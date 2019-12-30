@@ -299,6 +299,12 @@ namespace MoldQuoteUI
                 this.tree_control0.InsertNode(pNode, null, null, Tree.NodeInsertOption.Last);
                 cd.Node = pNode;
             }
+            foreach (Cuboid cd in mb.LowerEiectorPlates)
+            {
+                Node pNode = this.tree_control0.CreateNode(cd.Body.Tag.ToString());
+                this.tree_control0.InsertNode(pNode, null, null, Tree.NodeInsertOption.Last);
+                cd.Node = pNode;
+            }
             foreach (Cuboid cd in mb.UpperPlates)
             {
                 Node pNode = this.tree_control0.CreateNode(cd.Body.Tag.ToString());
@@ -306,6 +312,12 @@ namespace MoldQuoteUI
                 cd.Node = pNode;
             }
             foreach (Cuboid cd in mb.UpperSpacer)
+            {
+                Node pNode = this.tree_control0.CreateNode(cd.Body.Tag.ToString());
+                this.tree_control0.InsertNode(pNode, null, null, Tree.NodeInsertOption.Last);
+                cd.Node = pNode;
+            }
+            foreach (Cuboid cd in mb.UpperEiectorPlates)
             {
                 Node pNode = this.tree_control0.CreateNode(cd.Body.Tag.ToString());
                 this.tree_control0.InsertNode(pNode, null, null, Tree.NodeInsertOption.Last);

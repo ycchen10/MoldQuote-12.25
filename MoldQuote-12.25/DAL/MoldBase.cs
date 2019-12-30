@@ -71,15 +71,18 @@ namespace MoldQuote
             {
             }          
             this.UpperPlates = this.UpperPlates.OrderBy(o => o.CenderPt.Z).ToList(); ;
-            this.UpperSpacer = GetSpacer(this.LowerPlates);
+            
+            this.UpperSpacer = GetSpacer(this.UpperPlates);
+           
             if (this.UpperSpacer.Count > 0)
             {
+                double spacerMax = Math.Round(UpperSpacer[0].CenderPt.Z + UpperSpacer[0].DisPt.Z, 3);
+                double spacerMin = Math.Round(UpperSpacer[0].CenderPt.Z - UpperSpacer[0].DisPt.Z, 3);
                 foreach (Cuboid cu in cuboids)
                 {
                     double cuMax = Math.Round(cu.CenderPt.Z + cu.DisPt.Z, 3);
                     double cuMin = Math.Round(cu.CenderPt.Z - cu.DisPt.Z, 3);
-                    double spacerMax = Math.Round(UpperSpacer[0].CenderPt.Z + cu.DisPt.Z, 3);
-                    double spacerMin = Math.Round(UpperSpacer[0].CenderPt.Z - cu.DisPt.Z, 3);
+                   
                     if (spacerMin < cuMin && spacerMax > cuMax)
                     {
                         this.UpperEiectorPlates.Add(cu);
@@ -191,8 +194,8 @@ namespace MoldQuote
             List<Cuboid> sp = new List<Cuboid>();
             foreach (Cuboid cu in cuboids)
             {
-                if (!UMathUtils.IsEqual(cu.CenderPt.X, 0) && !UMathUtils.IsEqual(cu.CenderPt.Y, 0))
-                {
+                if (!UMathUtils.IsEqual(cu.CenderPt.X, 0) || !UMathUtils.IsEqual(cu.CenderPt.Y, 0))
+                {                   
                     sp.Add(cu);
                 }
 

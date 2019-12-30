@@ -46,13 +46,13 @@ namespace MoldQuote
             Matrix4 mat = new Matrix4();
             mat.Identity();
             mat.TransformToCsys(m_wcs, ref mat);
-
+            AnalyzeBodyFactory bodyFactory = new AnalyzeBodyFactory();
+            BodyBoundingBox box = new BodyBoundingBox();
             foreach (Body body in part.Bodies)
             {
-                BodyBoundingBox box = new BodyBoundingBox();
-                AnalyzeBodyFactory.GetBoundingBoxFace(body, ref box);
-                Cylinder cy = AnalyzeBodyFactory.CreateCylinder(body, box);
-                Cuboid cu = AnalyzeBodyFactory.CreateCuboid(body, box);
+                box = bodyFactory.GetBoundingBoxFace(body); ;
+                Cylinder cy = bodyFactory.CreateCylinder(body, box);
+                Cuboid cu = bodyFactory.CreateCuboid(body, box);
                 if (cy != null)
                 {
                     double angly = UMathUtils.Angle(cy.Direction, mat.GetZAxis());
@@ -68,12 +68,13 @@ namespace MoldQuote
 
         public void SetWcs(Body aPlate, Body bPlate)
         {
-            BodyBoundingBox boxA = new BodyBoundingBox();
-            BodyBoundingBox boxB = new BodyBoundingBox();
+
             Matrix4 mat = new Matrix4();
             mat.Identity();
-            AnalyzeBodyFactory.GetBoundingBoxFace(aPlate, ref boxA);
-            AnalyzeBodyFactory.GetBoundingBoxFace(bPlate, ref boxB);
+            AnalyzeBodyFactory bodyFactory = new AnalyzeBodyFactory();
+            BodyBoundingBox boxA = bodyFactory.GetBoundingBoxFace(aPlate);
+            BodyBoundingBox boxB = bodyFactory.GetBoundingBoxFace(bPlate);
+
             Point3d pt1 = UMathUtils.GetMiddle(boxA.CenderPt, boxA.CenderPt);
             Vector3d vec = UMathUtils.GetVector(boxB.CenderPt, boxA.CenderPt);
             mat.TransformToZAxis(pt1, vec);

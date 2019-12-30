@@ -11,8 +11,7 @@ namespace MoldQuote
 {
     public class AnalyzeBodyFactory
     {
-
-        public static Cylinder CreateCylinder(Body body, BodyBoundingBox box)
+        public Cylinder CreateCylinder(Body body, BodyBoundingBox box)
         {
             if (box.FaceOfMaxZ.Count == 1 && box.FaceOfMinZ.Count == 1
                 && (box.FaceOfMaxX.Count == 0 || box.FaceOfMaxX == null)
@@ -26,7 +25,7 @@ namespace MoldQuote
                     Cylinder cy = new Cylinder(body);
                     cy.FaceOfMaxZ = box.FaceOfMaxZ[0];
                     cy.FaceOfMinZ = box.FaceOfMinZ[0];
-                    
+
                     return cy;
                 }
 
@@ -34,7 +33,7 @@ namespace MoldQuote
 
             return null;
         }
-        public static Cuboid CreateCuboid(Body body, BodyBoundingBox box)
+        public Cuboid CreateCuboid(Body body, BodyBoundingBox box)
         {
             if (box.FaceOfMaxZ.Count >= 1 && box.FaceOfMinZ.Count >= 1
                 && box.FaceOfMaxX.Count >= 1 && box.FaceOfMinX.Count >= 1
@@ -56,9 +55,9 @@ namespace MoldQuote
             return null;
 
         }
-        public static void GetBoundingBoxFace(Body body, ref BodyBoundingBox box)
+        public BodyBoundingBox GetBoundingBoxFace(Body body)
         {
-
+            BodyBoundingBox box = new BodyBoundingBox();
             NXObject[] obj = { body };
             Matrix4 mat = new Matrix4();
             Point3d centerPt = new Point3d();
@@ -109,6 +108,7 @@ namespace MoldQuote
                         box.FaceOfMinY.Add(faceData);
                 }
             }
+            return box;
 
         }
         /// <summary>
@@ -116,7 +116,7 @@ namespace MoldQuote
         /// </summary>
         /// <param name="face"></param>
         /// <returns></returns>
-        public static bool AskFacePeripheralIsArc(Face face)
+        public bool AskFacePeripheralIsArc(Face face)
         {
             CycFaceLoop.LoopList[] loop = CycFaceLoop.AskFaceLoops(face.Tag);
             foreach (CycFaceLoop.LoopList lp in loop)
@@ -130,10 +130,6 @@ namespace MoldQuote
             }
             return false;
         }
-
-      
-
-      
 
     }
 }
